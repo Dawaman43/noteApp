@@ -1,0 +1,51 @@
+{% extends 'template/base.html' %}
+{% block title %}Submitted Notes{% endblock %}
+{% block content %}
+  <h2 class="mb-4 text-danger">Submitted Notes:</h2>
+
+  <!-- Search Form -->
+  <form method="get" class="mb-4">
+    <div class="input-group">
+      <input type="text" name="q" class="form-control" placeholder="Search notes..." value="{{ request.GET.q }}">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </form>
+
+  <div class="list-group">
+    {% for note in notes %}
+      <div class="list-group-item">
+        <div class="note-title" data-bs-toggle="collapse" data-bs-target="#noteContent{{ note.id }}" aria-expanded="false" aria-controls="noteContent{{ note.id }}">
+          {{ note.note_title }}
+        </div>
+        <div class="collapse note-content" id="noteContent{{ note.id }}">
+          <div class="mt-3">
+            <strong>Note:</strong> {{ note.note|linebreaks }}
+            <br>
+            <strong>File:</strong> 
+            {% if note.file %}
+              <a href="{{ note.file.url }}" target="_blank" class="btn btn-primary btn-sm">Download File</a>
+            {% else %}
+              <span class="text-muted">No file uploaded.</span>
+            {% endif %}
+            <br>
+            <strong>Created At:</strong> {{ note.created_at }}
+            <br>
+            <strong>Category:</strong> 
+            {% if note.category %}
+              {{ note.category.name }}
+            {% else %}
+              <span class="text-muted">No category assigned.</span>
+            {% endif %}
+            <br>
+            <div class="mt-3">
+              <a href="{% url 'edit_note' note.id %}" class="btn btn-warning btn-sm">Edit</a>
+              <a href="{% url 'delete_note' note.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No notes submitted yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
