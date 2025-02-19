@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -8,7 +7,6 @@ class Category(models.Model):
         return self.name
 
 class Notes(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     note_title = models.CharField(max_length=100)
     note = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
